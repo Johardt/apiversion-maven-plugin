@@ -47,6 +47,10 @@ public class ApiVersionMojo extends AbstractMojo {
             Map<String, Object> info = (Map<String, Object>) data.get("info");
             String version = (String) info.get("version");
 
+            if (version == null) {
+                throw new MojoExecutionException("Version not found in API file");
+            }
+
             // Log and set the property
             getLog().info("Writing version " + version + " to version.tmp");
 
