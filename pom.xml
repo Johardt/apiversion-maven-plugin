@@ -15,6 +15,10 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-plugin-tools.version>3.9.0</maven-plugin-tools.version>
+
+        <!-- Deployment-specific properties -->
+        <repository.id>gitlab-maven</repository.id>
+        <repository.url>https://gitlab.codecentric.de/api/v4/projects/6570/packages/maven</repository.url>
     </properties>
 
     <dependencies>
@@ -114,4 +118,21 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>${repository.id}</id>
+            <url>${repository.url}</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>${repository.id}</id>
+            <url>${repository.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${repository.id}</id>
+            <url>${repository.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

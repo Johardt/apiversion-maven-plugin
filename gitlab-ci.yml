@@ -1,0 +1,13 @@
+image: maven:latest
+
+stages:
+  - deploy
+
+before_script:
+  - mkdir -p ~/.m2
+  - cp -f .ci/settings.xml ~/.m2/
+
+deploy_plugin:
+  stage: deploy
+  script:
+    - mvn clean deploy -Dprivate.token=$MAVEN_PRIVATE_TOKEN
