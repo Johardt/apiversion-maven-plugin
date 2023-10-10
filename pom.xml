@@ -18,7 +18,7 @@
 
         <!-- Deployment-specific properties -->
         <repository.id>gitlab-maven</repository.id>
-        <repository.url>https://gitlab.codecentric.de/api/v4/projects/6570/packages/maven</repository.url>
+        <repository.url>https://gitlab.example.com/api/v4/groups/8234/-/packages/maven</repository.url>
     </properties>
 
     <dependencies>
