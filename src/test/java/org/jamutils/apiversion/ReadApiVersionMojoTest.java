@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
-class ApiVersionMojoTest {
+class ReadApiVersionMojoTest {
 
     @AfterEach
     public void tearDown() {
@@ -30,11 +30,11 @@ class ApiVersionMojoTest {
     @Test
     void testReadApiVersionYaml() throws Exception {
         MavenProject mockProject = Mockito.mock(MavenProject.class);
-        ApiVersionMojo apiVersionMojo = new ApiVersionMojo();
-        apiVersionMojo.project = mockProject;
-        apiVersionMojo.setFilePath("src/test/resources/api.yaml");
+        ReadApiVersionMojo readApiVersionMojo = new ReadApiVersionMojo();
+        readApiVersionMojo.project = mockProject;
+        readApiVersionMojo.setFilePath("src/test/resources/api.yaml");
 
-        apiVersionMojo.execute();
+        readApiVersionMojo.execute();
 
         File outputTmpFile = new File("version.tmp");
 
@@ -49,11 +49,11 @@ class ApiVersionMojoTest {
     @Test
     void testReadApiVersionJson() throws Exception {
         MavenProject mockProject = Mockito.mock(MavenProject.class);
-        ApiVersionMojo apiVersionMojo = new ApiVersionMojo();
-        apiVersionMojo.project = mockProject;
-        apiVersionMojo.setFilePath("src/test/resources/api.json");
+        ReadApiVersionMojo readApiVersionMojo = new ReadApiVersionMojo();
+        readApiVersionMojo.project = mockProject;
+        readApiVersionMojo.setFilePath("src/test/resources/api.json");
 
-        apiVersionMojo.execute();
+        readApiVersionMojo.execute();
 
         File outputTmpFile = new File("version.tmp");
 
@@ -69,13 +69,13 @@ class ApiVersionMojoTest {
     @CsvSource({"src/test/resources/api2.yaml", "src/test/resources/api.txt", "src/test/resources/invalidApi.yaml"})
     void testInvalidApiSpec(String apiFile) {
         MavenProject mockProject = Mockito.mock(MavenProject.class);
-        ApiVersionMojo apiVersionMojo = new ApiVersionMojo();
-        apiVersionMojo.project = mockProject;
-        apiVersionMojo.setFilePath(apiFile);
+        ReadApiVersionMojo readApiVersionMojo = new ReadApiVersionMojo();
+        readApiVersionMojo.project = mockProject;
+        readApiVersionMojo.setFilePath(apiFile);
 
         assertThrows(MojoExecutionException.class, () -> {
             try {
-                apiVersionMojo.execute();
+                readApiVersionMojo.execute();
             } catch (MojoFailureException e) {
                 fail("MojoFailureException thrown");
             }
