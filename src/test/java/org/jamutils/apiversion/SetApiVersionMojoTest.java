@@ -24,16 +24,18 @@ class SetApiVersionMojoTest {
     }
 
     @Test
-    void testSetVersion() throws MojoExecutionException {
+    void testSetVersion() throws MojoExecutionException, MojoFailureException {
         var setterMojo = new SetApiVersionMojo();
         setterMojo.setProject(project);
         setterMojo.setFilePath("src/test/resources/api.yaml");
+
+        setterMojo.execute();
 
         var mavenReader = new MavenXpp3Reader();
         try (var in = new FileInputStream(project.getFile())) {
             var model = mavenReader.read(in);
 
-            assertEquals("1.0.0", model.getVersion(), "Version is not 1.0.0");
+            assertEquals("1.0.0", model.getVersion(), "Version is not 0.1.0");
         } catch (Exception e) {
             throw new MojoExecutionException("Error reading pom.xml", e);
         }

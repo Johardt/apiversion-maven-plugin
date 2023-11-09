@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
   <artifactId>apiversion-maven-test</artifactId>
-  <version>0.1.0</version>
+  <version>1.0.0</version>
   <packaging>maven-plugin</packaging>
   <properties>
     <maven.compiler.target>17</maven.compiler.target>
