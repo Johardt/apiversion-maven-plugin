@@ -8,6 +8,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.apache.commons.text.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -35,11 +36,12 @@ public class MavenProjectWriter {
             throw new IOException(e);
         }
 
+        String escapedVersion = StringEscapeUtils.escapeXml11(version);
         NodeList childNodes = root.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             if (childNodes.item(i).getNodeName().equals("version")) {
                 System.out.println(childNodes.item(i).getTextContent());
-                childNodes.item(i).setTextContent(version);
+                childNodes.item(i).setTextContent(escapedVersion);
             }
         }
 
