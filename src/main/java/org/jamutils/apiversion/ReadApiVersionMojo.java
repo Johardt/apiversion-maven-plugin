@@ -10,6 +10,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+/**
+ * Reads the version from the API file and writes it to a temporary file.
+ * Obsolete. Use {@link org.jamutils.apiversion.SetApiVersionMojo} instead.
+ * @deprecated Use {@link org.jamutils.apiversion.SetApiVersionMojo} instead.
+ */
+@Deprecated(since = "2.1.0", forRemoval = true)
 @Mojo(name = "read-version")
 public class ReadApiVersionMojo extends AbstractMojo {
 

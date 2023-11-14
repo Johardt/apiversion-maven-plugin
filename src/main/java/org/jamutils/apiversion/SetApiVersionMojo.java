@@ -8,18 +8,21 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+/**
+ * Sets the version in the pom.xml file to the version in the API file.
+ */
 @Mojo(name = "set-version")
 public class SetApiVersionMojo extends AbstractMojo {
 
     @Parameter(property = "file.path", defaultValue = "api.yaml")
-    private String filePath;
+    private String apiFilePath;
 
     @Parameter(defaultValue = "${project}")
     MavenProject project;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        var reader = new ApiVersionReader(filePath);
+        var reader = new ApiVersionReader(apiFilePath);
         String version;
         try {
             version = reader.readVersion();
@@ -35,8 +38,8 @@ public class SetApiVersionMojo extends AbstractMojo {
         }
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setApiFilePath(String apiFilePath) {
+        this.apiFilePath = apiFilePath;
     }
 
     public void setProject(MavenProject project) {

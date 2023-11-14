@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,11 +25,18 @@ class SetApiVersionMojoTest {
         project.setFile(new File(baseDir, "pom.xml"));
     }
 
+    // Reset the pom after each test
+    @AfterEach
+    void tearDown() throws IOException {
+        MavenProjectWriter writer = new MavenProjectWriter(project.getFile());
+        writer.writeVersion("0.1.0");
+    }
+
     @Test
     void testSetVersion() throws MojoExecutionException, MojoFailureException {
         var setterMojo = new SetApiVersionMojo();
         setterMojo.setProject(project);
-        setterMojo.setFilePath("src/test/resources/api.yaml");
+        setterMojo.setApiFilePath("src/test/resources/api.yaml");
 
         setterMojo.execute();
 

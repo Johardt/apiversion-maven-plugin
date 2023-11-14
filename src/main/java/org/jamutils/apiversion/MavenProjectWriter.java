@@ -40,7 +40,6 @@ public class MavenProjectWriter {
         NodeList childNodes = root.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             if (childNodes.item(i).getNodeName().equals("version")) {
-                System.out.println(childNodes.item(i).getTextContent());
                 childNodes.item(i).setTextContent(escapedVersion);
             }
         }
