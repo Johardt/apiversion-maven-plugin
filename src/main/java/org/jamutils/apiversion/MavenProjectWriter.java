@@ -1,43 +1,58 @@
 package org.jamutils.apiversion;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class MavenProjectWriter {
 
-    private File pomFile;
+    private final File pomFile;
 
     public MavenProjectWriter(File pomFile) {
         this.pomFile = pomFile;
     }
 
     public void writeVersion(String version) throws IOException {
-        MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-        MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
-        Model model;
-
-        // Read the existing pom.xml into the model object.
-        try (InputStream in = Files.newInputStream(pomFile.toPath())) {
-            model = mavenReader.read(in, false);
-        } catch (FileNotFoundException | XmlPullParserException e) {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder;
+        Document doc;
+        Element root;
+        try {
+            // Disable DTDs to prevent XXE attacks
+            docFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            docBuilder = docFactory.newDocumentBuilder();
+            doc = docBuilder.parse(pomFile);
+            root = doc.getDocumentElement();
+        } catch (Exception e) {
             throw new IOException(e);
         }
 
-        // Update the version in the model object.
-        model.setVersion(version);
+        NodeList childNodes = root.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            if (childNodes.item(i).getNodeName().equals("version")) {
+                System.out.println(childNodes.item(i).getTextContent());
+                childNodes.item(i).setTextContent(version);
+            }
+        }
 
-        // Write the model object back to pom.xml.
-        try (OutputStream out = new FileOutputStream(pomFile)) {
-            mavenWriter.write(out, model);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer;
+        try {
+            transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(pomFile);
+
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            throw new IOException(e);
         }
     }
 
