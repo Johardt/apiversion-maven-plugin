@@ -6,6 +6,11 @@
     <version>0.1.0</version>
     <packaging>maven-plugin</packaging>
 
+    <modules>
+        <module>client</module>
+        <module>server</module>
+    </modules>
+
     <properties>
         <!-- Deployment-specific properties -->
         <maven.compiler.target>17</maven.compiler.target>

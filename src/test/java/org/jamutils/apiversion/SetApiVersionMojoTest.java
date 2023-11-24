@@ -33,8 +33,29 @@ class SetApiVersionMojoTest {
     }
 
     @Test
-    void testSetVersion() throws MojoExecutionException, MojoFailureException {
+    void testSetMultiPomVersion() throws MojoExecutionException, MojoFailureException {
         var setterMojo = new SetApiVersionMojo();
+        setterMojo.setProject(project);
+        setterMojo.setApiFilePath("src/test/resources/api.yaml");
+
+        setterMojo.execute();
+
+        var mavenReader = new MavenXpp3Reader();
+        try (var in = new FileInputStream(project.getFile().toPath().getParent().resolve("client").resolve("pom.xml").toFile())) {
+            var model = mavenReader.read(in);
+
+            assertEquals("1.0.0", model.getVersion(), "Version is not 0.1.0");
+        } catch (Exception e) {
+            throw new MojoExecutionException("Error reading pom.xml", e);
+        }
+    }
+
+    @Test
+    void testSinglePomVersion() throws MojoExecutionException, MojoFailureException {
+        var setterMojo = new SetApiVersionMojo();
+        project = new MavenProject();
+        project.setFile(new File("src/test/resources/client/pom.xml"));
+
         setterMojo.setProject(project);
         setterMojo.setApiFilePath("src/test/resources/api.yaml");
 

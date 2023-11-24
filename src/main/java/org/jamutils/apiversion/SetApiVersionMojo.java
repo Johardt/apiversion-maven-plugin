@@ -1,6 +1,7 @@
 package org.jamutils.apiversion;
 
 import java.io.IOException;
+import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -30,11 +31,35 @@ public class SetApiVersionMojo extends AbstractMojo {
             throw new MojoExecutionException("Error reading API file", e);
         }
 
-        var writer = new MavenProjectWriter(project.getFile());
+        MavenModuleReader moduleReader = new MavenModuleReader(project);
+        List<String> modules;
         try {
-            writer.writeVersion(version);
+            modules = moduleReader.readModules();
         } catch (IOException e) {
-            throw new MojoExecutionException("Error writing version to pom.xml", e);
+            throw new MojoExecutionException("Error reading pom.xml", e);
+        }
+
+        MavenProjectWriter writer;
+        if (modules.isEmpty()) {
+            // Only write the version in the root/local pom.xml
+            try {
+                writer = new MavenProjectWriter(project.getFile());
+                writer.writeVersion(version);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Error writing version to pom.xml", e);
+            }
+        } else {
+            // Only write the version in every child pom
+            for (String module : modules) {
+                var moduleProject = new MavenProject();
+                moduleProject.setFile(project.getFile().toPath().getParent().resolve(module).resolve("pom.xml").toFile());
+                writer = new MavenProjectWriter(moduleProject.getFile());
+                try {
+                    writer.writeVersion(version);
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Error writing version to pom.xml", e);
+                }
+            }
         }
     }
 
