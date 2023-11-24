@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Used to read the version from an OpenAPI spec.
+ */
 public class ApiVersionReader {
 
     private String filePath;
@@ -16,6 +19,11 @@ public class ApiVersionReader {
         this.filePath = filePath;
     }
 
+    /**
+     * Reads the version from the API file.
+     * @return The version of the OpenAPI spec
+     * @throws IOException If there is an error reading the API file
+     */
     public String readVersion() throws IOException {
         ObjectMapper mapper;
 
@@ -43,10 +51,20 @@ public class ApiVersionReader {
 
     }
 
+    /**
+     * Sets the path to the API file.
+     * Mainly used for testing.
+     * @param filePath The path to the API file
+     */
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Gets the path to the API file.
+     * Mainly used for testing.
+     * @return The path to the API file
+     */
     public String getFilePath() {
         return filePath;
     }

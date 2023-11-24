@@ -13,6 +13,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * Used to write the version to a Maven project.
+ */
 public class MavenProjectWriter {
 
     private final File pomFile;
@@ -21,6 +24,11 @@ public class MavenProjectWriter {
         this.pomFile = pomFile;
     }
 
+    /**
+     * Writes the version to the pom.xml file.
+     * @param version The version to write
+     * @throws IOException If there is an error writing to the pom.xml file
+     */
     public void writeVersion(String version) throws IOException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;

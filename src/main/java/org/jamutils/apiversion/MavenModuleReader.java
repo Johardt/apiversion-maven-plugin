@@ -10,8 +10,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 
 /**
- * Checks if there is a <modules> section in the pom.xml file.
- * If yes, it will return a list of the modules.
+ * Used to read the modules from a Maven project.
  */
 public class MavenModuleReader {
 
@@ -20,6 +19,12 @@ public class MavenModuleReader {
     public MavenModuleReader(MavenProject project) {
         this.project = project;
     }
+
+    /**
+     * Reads the modules from the pom.xml file. If there are no modules, an empty list is returned.
+     * @return A list of modules
+     * @throws IOException If there is an error reading the pom.xml file
+     */
     public List<String> readModules() throws IOException {
         var mavenReader = new MavenXpp3Reader();
         try (var in = new FileInputStream(project.getFile())) {

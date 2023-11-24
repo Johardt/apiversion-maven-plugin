@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -25,8 +24,12 @@ public class ReadApiVersionMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true)
     MavenProject project;
 
+    /**
+     * Reads the version from the API file and writes it to a temporary file.
+     * @throws MojoExecutionException If there is an error executing the mojo
+     */
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
 
         var apiVersionReader = new ApiVersionReader(filePath);
 
@@ -42,6 +45,10 @@ public class ReadApiVersionMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Sets the path to the API file.
+     * @param filePath The path to the API file
+     */
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }

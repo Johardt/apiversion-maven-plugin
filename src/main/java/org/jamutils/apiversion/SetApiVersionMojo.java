@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -21,8 +20,13 @@ public class SetApiVersionMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}")
     MavenProject project;
 
+    /**
+     * Sets the version in the pom.xml file to the version in the API file.
+     * Utilizes the ApiVersionReader, MavenModuleReader, and MavenProjectWriter classes.
+     * @throws MojoExecutionException If there is an error executing the mojo
+     */
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         var reader = new ApiVersionReader(apiFilePath);
         String version;
         try {
@@ -63,10 +67,18 @@ public class SetApiVersionMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Sets the path to the API file.
+     * @param apiFilePath The path to the API file
+     */
     public void setApiFilePath(String apiFilePath) {
         this.apiFilePath = apiFilePath;
     }
 
+    /**
+     * Sets the Maven project.
+     * @param project The Maven project
+     */
     public void setProject(MavenProject project) {
         this.project = project;
     }
