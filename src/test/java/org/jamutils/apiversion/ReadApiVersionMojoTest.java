@@ -74,11 +74,7 @@ class ReadApiVersionMojoTest {
         readApiVersionMojo.setFilePath(apiFile);
 
         assertThrows(MojoExecutionException.class, () -> {
-            try {
-                readApiVersionMojo.execute();
-            } catch (MojoFailureException e) {
-                fail("MojoFailureException thrown");
-            }
+            readApiVersionMojo.execute();
         }, "Exception not thrown");
     }
 }
